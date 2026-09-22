@@ -26,7 +26,8 @@ function validate(values) {
   if (!values.companyName.trim()) errors.companyName = "Enter your company name.";
   if (!values.email.trim()) errors.email = "Enter your business email.";
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) errors.email = "Enter a valid email address.";
-  if (values.phone && !/^[0-9+\-\s()]{7,20}$/.test(values.phone)) errors.phone = "Enter a valid phone number.";
+  if (!values.phone.trim()) errors.phone = "Enter your phone number.";
+  else if (!/^[0-9+\-\s()]{7,20}$/.test(values.phone)) errors.phone = "Enter a valid phone number.";
   if (!values.country.trim()) errors.country = "Enter your country.";
   if (!values.businessType) errors.businessType = "Select a business type.";
   if (!values.message.trim() || values.message.trim().length < 12) {
@@ -104,7 +105,7 @@ export default function ContactForm() {
         <Field label="Last Name" name="lastName" value={values.lastName} onChange={update} error={errors.lastName} required />
         <Field label="Company Name" name="companyName" value={values.companyName} onChange={update} error={errors.companyName} required className={styles.full} />
         <Field label="Business Email" name="email" type="email" value={values.email} onChange={update} error={errors.email} required />
-        <Field label="Phone Number" name="phone" type="tel" value={values.phone} onChange={update} error={errors.phone} />
+        <Field label="Phone Number" name="phone" type="tel" value={values.phone} onChange={update} error={errors.phone} required />
         <Field label="Country" name="country" value={values.country} onChange={update} error={errors.country} required />
         <label className={styles.field}>
           <span>Business Type</span>
@@ -119,17 +120,17 @@ export default function ContactForm() {
           {errors.businessType ? <em>{errors.businessType}</em> : <em aria-hidden="true">&nbsp;</em>}
         </label>
         <Field label="Product / Requirement" name="productRequirement" value={values.productRequirement} onChange={update} error={errors.productRequirement} />
-        <Field label="Target Market" name="targetMarket" value={values.targetMarket} onChange={update} error={errors.targetMarket} className={styles.full} />
+        <Field label="Target Market" name="targetMarket" value={values.targetMarket} onChange={update} error={errors.targetMarket} />
         <label className={`${styles.field} ${styles.full}`}>
           <span>Message</span>
-          <textarea name="message" rows="5" value={values.message} onChange={update} aria-invalid={Boolean(errors.message)} required />
+          <textarea name="message" rows="3" value={values.message} onChange={update} aria-invalid={Boolean(errors.message)} required />
           {errors.message ? <em>{errors.message}</em> : <em aria-hidden="true">&nbsp;</em>}
         </label>
       </div>
       <p className={status === "success" ? styles.success : status === "error" ? styles.error : styles.status} role="status">
         {serverMessage || "\u00a0"}
       </p>
-      <Button type="submit" variant="gold" disabled={status === "submitting"}>
+      <Button type="submit" variant="gold" className={styles.submit} disabled={status === "submitting"}>
         {status === "submitting" ? "Sending…" : "Send Enquiry"}
       </Button>
     </form>

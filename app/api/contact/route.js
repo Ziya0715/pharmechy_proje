@@ -18,12 +18,16 @@ export async function POST(request) {
     const targetMarket = String(body.targetMarket || "").trim();
     const message = String(body.message || "").trim();
 
-    if (!firstName || !lastName || !companyName || !email || !country || !businessType || message.length < 12) {
+    if (!firstName || !lastName || !companyName || !email || !phone || !country || !businessType || message.length < 12) {
       return Response.json({ ok: false, message: "Please complete the required fields." }, { status: 400 });
     }
 
     if (!isEmail(email)) {
       return Response.json({ ok: false, message: "Please provide a valid business email." }, { status: 400 });
+    }
+
+    if (!/^[0-9+\-\s()]{7,20}$/.test(phone)) {
+      return Response.json({ ok: false, message: "Please provide a valid phone number." }, { status: 400 });
     }
 
     if (businessType && !BUSINESS_TYPES.includes(businessType)) {
